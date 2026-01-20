@@ -2,5 +2,5 @@ flask
 flask-cors
 selenium
 requests
-webdriver-manager
 gunicorn
+selenium-chrome
