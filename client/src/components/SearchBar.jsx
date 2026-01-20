@@ -165,6 +165,7 @@ const SearchBar = () => {
                   <img src={NotFound} alt="Not Found" className='not-found-img' />
                   <div>
                     <h2>Not Found :(</h2>
+                    <p className='error-notes'> • We might have a problem with our server backend :(.</p>
                     <p className='error-notes'> • Please check the link.</p>
                     <p className='error-notes'> • Please make sure the board is public.</p>
                     <button onClick={closeModal} className='try-again'>Go Back</button>
