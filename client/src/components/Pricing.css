@@ -1,0 +1,425 @@
+
+.Pricing {
+    height: auto;
+    width: 100%;
+    background-color: var(--background-two);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Plus Jakarta Sans';
+}
+
+.Pricing-Main {
+    padding-top: 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-one);
+}
+
+.Pricing-Main>h2 {
+    font-size: 50px;
+    margin-bottom: 0.5rem;
+
+}
+
+.Pricing-Main>h2>span {
+    background: linear-gradient(0deg, #ff6a00, #ee0979);
+    background: var(--pink-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.Pricing-Main>h3 {
+    font-size: 18px;
+
+    text-align: center;
+    font-weight: 450;
+    width: 65%;
+    margin-bottom: 4.7rem;
+    opacity: 0.6;
+}
+
+.pricing-container {
+    width: 100%;
+    display: flex;
+    /* justify-content: space-around; */
+    gap: 1.4rem;
+    padding: 0 6rem;
+}
+
+.card {
+    height: auto;
+    width: 25vw;
+    background-color: white;
+    border: 1px solid rgb(245, 245, 245);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 5rem;
+}
+
+
+
+.service-name {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.price {
+    text-align: center;
+    font-size: 34px;
+    font-weight: 700;
+
+}
+
+.price>span {
+    font-size: 14px;
+    opacity: 0.6;
+    font-weight: 450;
+}
+
+.tag {
+    text-align: center;
+    font-size: 15px;
+    opacity: 0.6;
+    margin-bottom: 2rem;
+}
+
+.includes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
+
+.includes>div {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.includes img {
+    height: 22px;
+    width: 22px;
+}
+
+.buy-button {
+    padding: 1rem;
+    font-size: 18px;
+    font-weight: 540;
+    background-color: white;
+    border-radius: 12px;
+    border: 1px solid gainsboro;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+}
+
+/* .buy-button:hover{
+    box-shadow: 0 7px 10px #ff892249;
+} */
+.in-use {
+    border: pink;
+
+}
+.Free:hover {
+        background-color: var(--main-color);
+        color: white;
+    }
+
+
+.Single-Use {
+    position: relative;
+    overflow: hidden;
+    background: var(--yellow-gradient);
+    background-size: 300% 100%;
+    background-position: 0% 0%;
+    color: white;
+    border: none;
+    border-radius: 14.675px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    animation: gradientShift 2s ease infinite;
+}
+
+.Single-Use::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center,
+            rgba(255, 255, 255, 0.3),
+            transparent 60%);
+    filter: blur(12px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 1;
+    animation: shimmerMove 2s linear infinite;
+}
+
+.Monthly {
+    border: 1px solid var(--main-color);
+    color: #ff3535;
+}
+
+.Monthly:Hover {
+        background-color: var(--main-color);
+        color: white;
+    }
+
+
+
+@media (max-width: 480px) {
+    .Pricing {
+        height: auto;
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'Plus Jakarta Sans';
+        margin-bottom: 2rem;
+    }
+
+    .Pricing-Main {
+        padding-top: 2rem;
+    }
+
+    .Pricing-Main>h2 {
+        font-size: 42px;
+        margin-bottom: 1rem;
+        font-weight: 400;
+        text-align: center;
+
+    }
+
+    .Pricing-Main>h2>span {
+        font-weight: 600;
+    }
+
+    .Pricing-Main>h3 {
+        font-size: 14px;
+
+        text-align: center;
+        font-weight: 450;
+        width: 70%;
+        margin-bottom: 1rem;
+        opacity: 0.6;
+    }
+
+    .pricing-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0px 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .card {
+        height: auto;
+        width: 100%;
+        background-color: white;
+        padding: 1.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-bottom: 0;
+    }
+
+    .service-name {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .price {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+
+    }
+
+    .price>span {
+        font-size: 14px;
+        opacity: 0.6;
+        font-weight: 450;
+    }
+
+    .tag {
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .includes {
+        font-size: 14px;
+        font-weight: 400;
+        margin-bottom: 1rem;
+                flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .includes>div {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    .includes img {
+        height: 16px;
+        width: 16px;
+    }
+
+    .buy-button {
+        padding: 0.5rem;
+        font-size: 14px;
+    }
+
+
+}
+
+@media only screen and (min-width: 481px) and (max-width: 1024px) {
+    .Pricing {
+        height: auto;
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'Plus Jakarta Sans';
+        margin-bottom: 2rem;
+    }
+
+    .Pricing-Main {
+        padding-top: 3rem;
+    }
+
+    .Pricing-Main>h2 {
+        font-size: 42px;
+        margin-bottom: 1rem;
+        font-weight: 400;
+        text-align: center;
+
+    }
+
+    .Pricing-Main>h2>span {
+        font-weight: 600;
+    }
+
+    .Pricing-Main>h3 {
+        font-size: 16px;
+
+        text-align: center;
+        font-weight: 450;
+        width: 80%;
+        margin-bottom: 1rem;
+        opacity: 0.6;
+    }
+
+    .pricing-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .card {
+        height: auto;
+        width: 100%;
+        max-width: 500px;
+        background-color: white;
+        padding: 1.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-bottom: 0;
+    }
+
+    .service-name {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .price {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+
+    }
+
+    .price>span {
+        font-size: 14px;
+        opacity: 0.6;
+        font-weight: 450;
+    }
+
+    .tag {
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .includes {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+
+        /* text-align: center; */
+        font-size: 14px;
+        font-weight: 400;
+        margin-bottom: 1rem;
+    }
+
+    .includes>div {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    .includes img {
+        height: 16px;
+        width: 16px;
+    }
+
+    .buy-button {
+        padding: 1.1rem;
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 1281px) {
+
+    .card:hover {
+        /* box-shadow: 0 2px 10px var(--highlight); */
+        border: 2px solid var(--main-color);
+        transform: translateY(-3%);
+        transition: all 0.3s ease-in-out;
+
+        .icon img {
+            scale: 1.1;
+            transition: scale 0.3s ease-in-out;
+        }
+
+    }
+}

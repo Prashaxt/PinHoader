@@ -1,0 +1,25 @@
+.Logo {
+    font-size: 1.5rem;
+    color: var(--main-color);
+    font-weight: 900;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* align-items: end; */
+}
+
+.Logo>img {
+    height: 50px;
+    width: auto;
+}
+
+@media (max-width: 933px) {
+    .Logo {
+        font-size: 1.2rem;
+        gap: 6px;
+    }
+    .Logo>img {
+        height: 30px;
+    }
+}
