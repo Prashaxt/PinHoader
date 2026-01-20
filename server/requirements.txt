@@ -2,8 +2,5 @@ flask
 flask-cors
 selenium
 requests
-```
-
-**2. Create `Procfile`** (in server folder):
-```
-web: python app.py
+webdriver-manager
+gunicorn

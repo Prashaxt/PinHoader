@@ -15,15 +15,20 @@ app = Flask(__name__)
 CORS(app)
 
 def setup_driver():
-    """Setup Chrome driver with options"""
+    """Setup Chrome driver with options for Render"""
+    from selenium.webdriver.chrome.service import Service
+    from webdriver_manager.chrome import ChromeDriverManager
+    
     chrome_options = Options()
-    chrome_options.add_argument('--headless')  
+    chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--disable-blink-features=AutomationControlled')
     chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
     
-    driver = webdriver.Chrome(options=chrome_options)
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=chrome_options)
     return driver
 
 def get_board_preview(driver, board_url):
@@ -250,5 +255,5 @@ def download_zip():
 
 if __name__ == '__main__':
     import os
-    port = int(os.environ.get('PORT', 3001))
-    app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port, debug=False)
