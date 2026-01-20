@@ -14,13 +14,9 @@ app.get('/', (req, res) => {
 });
 
 const pexelsRouter = require('./routes/pexels');
-const boardFetchRouter = require('./routes/boardFetch');
-const boardDownloader = require('./routes/downloadZip');
 
 
 app.use(pexelsRouter);
-app.use(boardFetchRouter);
-app.use(boardDownloader);
 
 
 
