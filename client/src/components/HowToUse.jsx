@@ -1,5 +1,5 @@
 import React from 'react'
-import  './HowtoUse.css'
+import  './HowToUse.css'
 import Tick from '../assets/IconTick.svg'
 import DownloadButtonImage from '../assets/DownloadButtonImg.png'
 import SearchbarImg from '../assets/SearchbarImg.png'
