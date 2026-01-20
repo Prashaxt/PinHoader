@@ -32,7 +32,7 @@ Please be patient on your first search. ☕
 4. **Preview** - Check out the board details and preview images
 5. **Download** - Click the Download button to get your zip file!
 
-⏱️ Remember: First search takes ~1 minute, then it's fast!
+ Remember: First search takes ~1 minute, then it's fast!
 
 ---
 
@@ -53,7 +53,7 @@ Please be patient on your first search. ☕
 
 ---
 
-## 🏗️ Local Development
+##  Local Development
 
 Want to run PinHoader locally? Here's how:
 
@@ -107,7 +107,7 @@ fetch('http://localhost:3001/api/downloadBoard', ...)
 
 ---
 
-## 📝 Environment Variables
+##  Environment Variables
 
 ### Backend (Optional)
 - `PORT` - Server port (default: 3001)
@@ -115,7 +115,7 @@ fetch('http://localhost:3001/api/downloadBoard', ...)
 
 ---
 
-## 🚨 Limitations
+##  Limitations
 
 - **Public boards only** - Cannot access private or secret boards
 - **250 pins max** - Limited to 250 images per download
@@ -123,16 +123,15 @@ fetch('http://localhost:3001/api/downloadBoard', ...)
 - **No videos** - Only downloads images, not video pins
 - **Rate limiting** - Pinterest may block if you scrape too aggressively
 
-
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## ⚖️ Disclaimer
+##  Disclaimer
 
 This tool is for **personal use only**. Please respect Pinterest's Terms of Service and copyright laws:
 
@@ -145,7 +144,7 @@ This tool is for **personal use only**. Please respect Pinterest's Terms of Serv
 
 ---
 
-## 🐛 Known Issues
+##  Known Issues
 
 - **Slow first load** - Free tier limitation (server sleeps)
 - **Some boards fail** - Pinterest's structure varies, some boards may not work
@@ -153,7 +152,7 @@ This tool is for **personal use only**. Please respect Pinterest's Terms of Serv
 
 ---
 
-## 💡 Tips
+##  Tips
 
 - **Be patient on first search** - It will be fast after the initial wake-up
 - **Check board visibility** - Make sure the board is public
@@ -162,7 +161,7 @@ This tool is for **personal use only**. Please respect Pinterest's Terms of Serv
 
 ---
 
-## 📧 Support
+##  Support
 
 Found a bug or have a feature request?
 
@@ -171,7 +170,7 @@ Found a bug or have a feature request?
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Built with love for the Pinterest community
 - Thanks to Render and Vercel for free hosting
@@ -185,4 +184,4 @@ If you found this useful, please give it a star! It helps others discover the pr
 
 ---
 
-**Happy Downloading! 📌✨**
+**Happy Downloading! **
