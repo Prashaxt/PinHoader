@@ -184,4 +184,4 @@ If you found this useful, please give it a star! It helps others discover the pr
 
 ---
 
-**Happy Downloading! **
+**Happy Downloading!**
