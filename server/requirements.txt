@@ -1,6 +1,4 @@
 flask
 flask-cors
-selenium
+pinterest-dl
 requests
-gunicorn
-selenium-chrome
