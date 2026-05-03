@@ -90,9 +90,9 @@ const SearchBar = () => {
         }
 
         resolvedUrl = resolveData.resolvedUrl;
-        setFinalUrl(setCleanUrl(resolvedUrl));
         setValidationError('');
       }
+      setFinalUrl(setCleanUrl(resolvedUrl));
 
       // Step 2 — Extract username and board
       const url = new URL(resolvedUrl);
