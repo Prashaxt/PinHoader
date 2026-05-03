@@ -80,11 +80,13 @@ def download_zip():
     data = request.json
     board_url = data.get('boardUrl')
     board_name = data.get('boardName', 'pinterest_board')
+    board_owner_name = data.get('boardOwner', 'unknown_owner')
 
     if not board_url:
         return jsonify({'error': 'Board URL is required'}), 400
 
-    safe_filename = sanitize_filename(board_name)
+    filename = f"{board_name}_{board_owner_name}"
+    safe_filename = sanitize_filename(filename)
 
     def generate():
         try:
@@ -167,135 +169,27 @@ def health():
     return jsonify({'status': 'ok'})
 
 
+@app.route('/api/resolveUrl', methods=['POST'])
+def resolve_url():
+    data = request.json
+    short_url = data.get('url')
+    
+    try:
+        res = requests.head(short_url, allow_redirects=True, timeout=10)
+        real_url = res.url
+        
+        # Make sure it resolved to a Pinterest board
+        if 'pinterest' not in real_url:
+            return jsonify({'error': 'Not a Pinterest URL'}), 400
+            
+        return jsonify({'resolvedUrl': real_url})
+    except:
+        return jsonify({'error': 'Could not resolve URL'}), 500
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
 
 
 # --------------------------------------------------------------------------------------------------
-
-# from flask import Flask, request, jsonify, send_file
-# from flask_cors import CORS
-# from pinterest_dl import PinterestDL
-# from io import BytesIO
-# import zipfile
-# import requests
-# import re
-# import os
-
-# app = Flask(__name__)
-# CORS(app)
-
-# MAX_PINS = 300
-
-# def sanitize_filename(name):
-#     """Convert board name to safe filename."""
-#     name = name.lower().strip()
-#     name = re.sub(r'[^a-z0-9_\-]', '_', name)
-#     name = re.sub(r'_+', '_', name)  # collapse multiple underscores
-#     return name or 'pinterest_board'
-
-# def get_image_urls(board_url, num=MAX_PINS):
-#     """Scrape image URLs using pinterest-dl API mode — no browser needed."""
-#     scraped = PinterestDL.with_api(
-#         timeout=10,
-#         verbose=False,
-#     ).scrape(
-#         url=board_url,
-#         num=num,
-#     )
-
-#     urls = []
-#     for media in scraped:
-#         d = media.to_dict()
-#         src = d.get('src', '')
-#         if src:
-#             # src is already full resolution (orig), but fallback to 736x if needed
-#             urls.append(src)
-
-#     return urls
-
-
-# @app.route('/api/downloadZip', methods=['POST'])
-# def download_zip():
-#     data = request.json
-#     board_url = data.get('boardUrl')
-#     board_name = data.get('boardName', 'pinterest_board')
-
-#     if not board_url:
-#         return jsonify({'error': 'Board URL is required'}), 400
-
-#     safe_filename = sanitize_filename(board_name)
-#     zip_filename = f'{safe_filename}.zip'
-
-#     print(f"Starting download for: {board_url}")
-#     print(f"Zip filename: {zip_filename}")
-
-#     try:
-#         # Step 1: Scrape image URLs using pinterest-dl
-#         print("Scraping image URLs...")
-#         image_urls = get_image_urls(board_url, num=MAX_PINS)
-#         print(f"Found {len(image_urls)} images")
-
-#         if not image_urls:
-#             return jsonify({'error': 'No images found for this board'}), 404
-
-#         # Step 2: Download images and zip them in memory
-#         zip_buffer = BytesIO()
-
-#         with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-#             for idx, image_url in enumerate(image_urls):
-#                 try:
-#                     response = requests.get(image_url, timeout=10)
-
-#                     if response.status_code == 200:
-#                         # Determine file extension from URL or content type
-#                         content_type = response.headers.get('Content-Type', '')
-#                         if 'png' in image_url.lower() or 'png' in content_type:
-#                             ext = 'png'
-#                         elif 'gif' in image_url.lower() or 'gif' in content_type:
-#                             ext = 'gif'
-#                         elif 'webp' in image_url.lower() or 'webp' in content_type:
-#                             ext = 'webp'
-#                         else:
-#                             ext = 'jpg'
-
-#                         filename = f'pin_{idx + 1:03d}.{ext}'
-#                         zip_file.writestr(filename, response.content)
-#                         print(f"Added {filename} ({idx + 1}/{len(image_urls)})")
-
-#                     elif response.status_code == 403:
-#                         # Try fallback to 736x if original fails
-#                         fallback_url = re.sub(r'/originals/', '/736x/', image_url)
-#                         if fallback_url != image_url:
-#                             fb_res = requests.get(fallback_url, timeout=10)
-#                             if fb_res.status_code == 200:
-#                                 zip_file.writestr(f'pin_{idx + 1:03d}.jpg', fb_res.content)
-#                                 print(f"Added pin_{idx + 1:03d}.jpg via fallback")
-
-#                 except Exception as e:
-#                     print(f"Skipped image {idx + 1}: {e}")
-#                     continue
-
-#         zip_buffer.seek(0)
-
-#         return send_file(
-#             zip_buffer,
-#             mimetype='application/zip',
-#             as_attachment=True,
-#             download_name=zip_filename
-#         )
-
-#     except Exception as e:
-#         print(f"Error: {e}")
-#         return jsonify({'error': 'Failed to create zip file'}), 500
-
-
-# @app.route('/health', methods=['GET'])
-# def health():
-#     return jsonify({'status': 'ok'})
-
-
-# if __name__ == '__main__':
-#     port = int(os.environ.get('PORT', 5000))
-#     app.run(host='0.0.0.0', port=port, debug=False)
