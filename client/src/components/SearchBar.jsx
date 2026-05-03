@@ -66,7 +66,7 @@ const SearchBar = () => {
 
       // Step 1 — Resolve pin.it short links via backend
       if (isPinItLink(resolvedUrl)) {
-        setValidationError('Resolving short link...');
+        // setValidationError('Resolving short link...');
         const resolveRes = await fetch('https://pinhoader.onrender.com/api/resolveUrl', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -171,13 +171,10 @@ const SearchBar = () => {
             }
 
             if (event.status === 'done') {
-              // decode base64 zip and trigger browser download
-              const bytes = atob(event.data);
-              const arr = new Uint8Array(bytes.length);
-              for (let i = 0; i < bytes.length; i++) {
-                arr[i] = bytes.charCodeAt(i);
-              }
-              const blob = new Blob([arr], { type: 'application/zip' });
+              const zipRes = await fetch(
+                `https://pinhoader.onrender.com/api/getZip/${event.downloadId}`
+              );
+              const blob = await zipRes.blob();
               const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;
@@ -262,7 +259,6 @@ const SearchBar = () => {
                         <h2>Board Not Found</h2>
                         <p className='error-notes'>• Make sure the board is public.</p>
                         <p className='error-notes'>• Double check the link is correct.</p>
-                        <p className='error-notes'>• Section links aren't supported, use the main board link.</p>
                       </>
                     )}
                     {errorType === 'server' && (
@@ -302,6 +298,11 @@ const SearchBar = () => {
                       </div>
                       <button className='download-button' onClick={handleZipDownload} disabled={isDownloading} >
                         <div>
+                          {!isDownloading && !downloadProgress && (
+                            <p style={{ color: 'white', margin: '0 0 6px' }}>
+                              Download
+                            </p>
+                          )}
                           {isDownloading && downloadProgress && (
                             <div style={{ marginTop: '12px' }}>
                               <p style={{ color: 'white', margin: '0 0 6px' }}>
