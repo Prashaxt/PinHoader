@@ -15,7 +15,7 @@ const Home = () => {
         <div>
 
         <h1 className='MainText'>Pinterest Board Downloader Online</h1>
-        <h2 className='Tagline'>No apps, no accounts, no drama — just click stuff and take it like it’s yours</h2>
+        <h2 className='Tagline'>No apps, no accounts — just click stuff and take it</h2>
 
         <div className='SearchBarDiv'> <SearchBar /> </div>
         </div>

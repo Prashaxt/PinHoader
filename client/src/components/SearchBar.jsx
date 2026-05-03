@@ -34,47 +34,71 @@ const SearchBar = () => {
   };
 
   const handleSearch = async (boardUrl) => {
+  if (!boardUrl.trim()) {
+    setValidationError('Input cannot be empty.');
+    return;
+  }
 
-    // Validate input before making the request
-    if (!boardUrl.trim()) {
-      setValidationError('Input cannot be empty.');
-      return;
-    }
+  if (!isValidPinterestBoard(boardUrl)) {
+    setValidationError('Please enter a valid Pinterest board URL.');
+    return;
+  }
 
-    if (!isValidPinterestBoard(boardUrl)) {
+  setValidationError('');
+  setIsLoading(true);
+
+  try {
+    // Extract username and board from URL
+    const url = new URL(boardUrl.startsWith('http') ? boardUrl : `https://${boardUrl}`);
+    const parts = url.pathname.split('/').filter(Boolean);
+    
+    if (parts.length < 2) {
       setValidationError('Please enter a valid Pinterest board URL.');
+      setIsLoading(false);
       return;
     }
 
-    setValidationError('');
-    setIsLoading(true);
+    const username = parts[0];
+    const boardSection = parts[1];
 
-    try {
-      const res = await fetch('https://pinhoader.onrender.com/api/downloadBoard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ boardUrl }),
+    // Call pidgets API directly from frontend
+    const res = await fetch(
+      `https://api.pinterest.com/v3/pidgets/boards/${username}/${boardSection}/pins/`
+    );
+
+    const data = await res.json();
+
+    if (data.status !== 'success') {
+      setModalStatus('error');
+    } else {
+      const board = data.data?.board;
+      const pins = data.data?.pins || [];
+
+      setBoardInfo({
+        name: board?.name,
+        pin_count: board?.pin_count,
+        image_thumbnail_url: board?.image_thumbnail_url,
       });
 
-      const data = await res.json();
+      setPins(pins.slice(0, 8).map((pin, idx) => ({
+        id: `pin-${idx + 1}`,
+        images: {
+          '236x': {
+            url: pin?.images?.['236x']?.url
+          }
+        }
+      })));
 
-      if (!res.ok) {
-        setModalStatus('error');
-      } else {
-        const boardData = data.apiResult?.data;
-        setBoardInfo(boardData?.board)
-        setPins(boardData?.pins || [])
-        setModalStatus('success');
-        console.log('Received API data:', data.apiResult)
-      }
-    } catch (error) {
-      setModalStatus('error');
-    } finally {
-      setIsLoading(false);
+      setModalStatus('success');
     }
-
+  } catch (error) {
+    console.error(error);
+    setModalStatus('error');
+  } finally {
+    setIsLoading(false);
     setIsModalOpen(true);
-  };
+  }
+};
 
   const handleZipDownload = async () => {
   setIsDownloading(true);
@@ -85,7 +109,7 @@ const SearchBar = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         boardUrl: inputValue,  // Pass the original board URL
-        boardName: boardInfo?.name || 'pinterest_pins'
+        boardName: boardInfo?.name || 'pinterest_board_pins'
       }),
     });
 
