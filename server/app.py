@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, send_file
 from flask_cors import CORS
 from pinterest_dl import PinterestDL
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -8,7 +8,7 @@ import requests
 import re
 import os
 import json
-import base64
+import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -16,11 +16,15 @@ CORS(app)
 MAX_PINS = 300
 MAX_WORKERS = 10
 
+# Temporary in-memory zip storage { download_id: { data, filename } }
+zip_storage = {}
+
 
 def sanitize_filename(name):
     name = name.lower().strip()
     name = re.sub(r'[^a-z0-9_\-]', '_', name)
     name = re.sub(r'_+', '_', name)
+    name = name.strip('_')
     return name or 'pinterest_board'
 
 
@@ -80,13 +84,14 @@ def download_zip():
     data = request.json
     board_url = data.get('boardUrl')
     board_name = data.get('boardName', 'pinterest_board')
-    board_owner_name = data.get('boardOwner', 'unknown_owner')
+    board_owner = data.get('boardOwner', '')
 
     if not board_url:
         return jsonify({'error': 'Board URL is required'}), 400
 
-    filename = f"{board_name}_{board_owner_name}"
-    safe_filename = sanitize_filename(filename)
+    raw_filename = f"{board_name}_{board_owner}" if board_owner else board_name
+    safe_filename = sanitize_filename(raw_filename)
+    download_id = str(uuid.uuid4())
 
     def generate():
         try:
@@ -116,13 +121,11 @@ def download_zip():
                     executor.submit(download_image, (idx, url)): idx
                     for idx, url in enumerate(image_urls)
                 }
-
                 for future in as_completed(futures):
                     idx, content, url = future.result()
                     if content:
                         results[idx] = (content, url)
                     completed += 1
-
                     yield sse({
                         'status': 'downloading',
                         'message': f'Downloading {completed}/{total} pins...',
@@ -140,14 +143,19 @@ def download_zip():
                     ext = get_ext(url)
                     zip_file.writestr(f'pin_{idx + 1:03d}.{ext}', content)
 
-            # Step 4 — Send as base64
-            zip_b64 = base64.b64encode(zip_buffer.getvalue()).decode()
+            # Step 4 — Store zip with unique ID, send only the ID via SSE
+            zip_storage[download_id] = {
+                'data': zip_buffer.getvalue(),
+                'filename': f'{safe_filename}.zip'
+            }
+
+            print(f"Zip ready: {safe_filename}.zip ({len(zip_buffer.getvalue())} bytes)")
 
             yield sse({
                 'status': 'done',
                 'message': 'Done!',
-                'filename': f'{safe_filename}.zip',
-                'data': zip_b64
+                'downloadId': download_id,
+                'filename': f'{safe_filename}.zip'
             })
 
         except Exception as e:
@@ -164,32 +172,44 @@ def download_zip():
     )
 
 
-@app.route('/health', methods=['GET'])
-def health():
-    return jsonify({'status': 'ok'})
+@app.route('/api/getZip/<download_id>', methods=['GET'])
+def get_zip(download_id):
+    """Instantly serve the already-zipped file by its unique ID"""
+    if download_id not in zip_storage:
+        return jsonify({'error': 'File not found or already downloaded'}), 404
+
+    zip_data = zip_storage.pop(download_id)  # remove after serving — no memory leak
+
+    return send_file(
+        BytesIO(zip_data['data']),
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=zip_data['filename']
+    )
 
 
 @app.route('/api/resolveUrl', methods=['POST'])
 def resolve_url():
     data = request.json
     short_url = data.get('url')
-    
+
     try:
         res = requests.head(short_url, allow_redirects=True, timeout=10)
         real_url = res.url
-        
-        # Make sure it resolved to a Pinterest board
+
         if 'pinterest' not in real_url:
             return jsonify({'error': 'Not a Pinterest URL'}), 400
-            
+
         return jsonify({'resolvedUrl': real_url})
     except:
         return jsonify({'error': 'Could not resolve URL'}), 500
 
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok'})
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-
-
-# --------------------------------------------------------------------------------------------------
