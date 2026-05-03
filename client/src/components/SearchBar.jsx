@@ -20,8 +20,17 @@ function isValidPinterestBoard(input) {
   return pattern.test(url);
 }
 
+function setCleanUrl(input) {
+  const url = new URL(input);
+  const cleanUrl = url.origin + url.pathname;
+  return cleanUrl ;
+  
+}
+
 const SearchBar = () => {
   const [inputValue, setInputValue] = useState('');
+  const [finalUrl, setFinalUrl] = useState('');
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStatus, setModalStatus] = useState(null);
 
@@ -66,7 +75,7 @@ const SearchBar = () => {
 
       // Step 1 — Resolve pin.it short links via backend
       if (isPinItLink(resolvedUrl)) {
-        // setValidationError('Resolving short link...');
+      
         const resolveRes = await fetch('https://pinhoader.onrender.com/api/resolveUrl', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -81,6 +90,7 @@ const SearchBar = () => {
         }
 
         resolvedUrl = resolveData.resolvedUrl;
+        setFinalUrl(setCleanUrl(resolvedUrl));
         setValidationError('');
       }
 
@@ -137,12 +147,16 @@ const SearchBar = () => {
     setIsDownloading(true);
     setDownloadProgress({ message: 'Starting...', current: 0, total: 0 });
 
+    
+    
+    console.log("check final url 2");
+    console.log(finalUrl);
     try {
       const response = await fetch('https://pinhoader.onrender.com/api/downloadZip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          boardUrl: inputValue,
+          boardUrl: finalUrl,
           boardName: boardInfo?.name || 'pinterest_board',
           boardOwner: boardOwnerInfo?.ownerName || 'unknown_owner'
         }),
