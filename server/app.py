@@ -11,6 +11,7 @@ import json
 import uuid
 import threading
 import time
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 CORS(app)
@@ -68,13 +69,9 @@ def download_image(args):
 
 
 def get_ext(url):
-    if 'png' in url.lower():
-        return 'png'
-    if 'gif' in url.lower():
-        return 'gif'
-    if 'webp' in url.lower():
-        return 'webp'
-    return 'jpg'
+    path = urlparse(url).path
+    ext = os.path.splitext(path)[1].lstrip('.').lower()
+    return ext if ext in ('jpg', 'jpeg', 'png', 'gif', 'webp') else 'jpg'
 
 
 def sse(payload):
@@ -160,7 +157,7 @@ def download_zip():
                 'filename': f'{safe_filename}.zip'
             }
             
-            cleanup_zip(download_id, delay=30)
+            cleanup_zip(download_id, delay=120)
 
             print(f"Zip ready: {safe_filename}.zip ({len(zip_buffer.getvalue())} bytes)")
 
