@@ -318,9 +318,6 @@ return (
                   )}
                   <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
                     <button onClick={closeModal} className='try-again'>Go Back</button>
-                    <button onClick={() => { closeModal(); setTimeout(() => handleSearch(inputValue), 100); }} className='try-again'>
-                      Retry
-                    </button>
                   </div>
                 </div>
               </div>
