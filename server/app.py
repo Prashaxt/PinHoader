@@ -9,6 +9,8 @@ import re
 import os
 import json
 import uuid
+import threading
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -77,6 +79,15 @@ def get_ext(url):
 
 def sse(payload):
     return f"data: {json.dumps(payload)}\n\n"
+
+def cleanup_zip(download_id, delay=300):
+    """Delete zip from memory after delay seconds if not downloaded"""
+    def _cleanup():
+        time.sleep(delay)
+        if download_id in zip_storage:
+            del zip_storage[download_id]
+            print(f"Cleaned up orphaned zip: {download_id}")
+    threading.Thread(target=_cleanup, daemon=True).start()
 
 
 @app.route('/api/downloadZip', methods=['POST'])
@@ -148,6 +159,8 @@ def download_zip():
                 'data': zip_buffer.getvalue(),
                 'filename': f'{safe_filename}.zip'
             }
+            
+            cleanup_zip(download_id, delay=30)
 
             print(f"Zip ready: {safe_filename}.zip ({len(zip_buffer.getvalue())} bytes)")
 
@@ -178,7 +191,7 @@ def get_zip(download_id):
     if download_id not in zip_storage:
         return jsonify({'error': 'File not found or already downloaded'}), 404
 
-    zip_data = zip_storage.pop(download_id)  # remove after serving — no memory leak
+    zip_data = zip_storage.pop(download_id)  # remove after serving ,no memory leak
 
     return send_file(
         BytesIO(zip_data['data']),
