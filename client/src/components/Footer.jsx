@@ -20,7 +20,7 @@ const Footer = () => {
                         <Link to="#home">Home</Link>
                         <Link to="#features">Features</Link>
                         <Link to="#howto">How to use</Link>
-                        <a href="/privacy-policy.md" target="_blank" rel="noopener noreferrer">
+                        <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
                             Privacy Policy
                         </a>
                         {/* <Link to="#pricing">Pricing</Link> */}
