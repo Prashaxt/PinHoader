@@ -8,7 +8,7 @@ A free Pinterest board downloader that lets you download entire boards as a zip 
 
 This is because the free backend server (Render) goes to sleep after 15 minutes of inactivity. The first request wakes it up, which takes about a minute. After that, all subsequent searches will be fast!
 
-Please be patient on your first search. ☕
+Please be patient on your first search. 
 
 ---
 
@@ -17,7 +17,6 @@ Please be patient on your first search. ☕
 -  **Simple & Fast** - Just paste a Pinterest board URL and download
 -  **Bulk Download** - Downloads up to 250 pins per board
 -  **Original Quality** - Downloads images in their original resolution
--  **Preview Before Download** - See 8 preview images before downloading
 -  **Completely Free** - No subscriptions, no limits
 -  **Public Boards Only** - Works with any public Pinterest board
 
@@ -42,83 +41,22 @@ Please be patient on your first search. ☕
 - **React** - UI framework
 - **Vite** - Build tool
 - **React Router** - Navigation
-- **Deployed on Vercel** - Lightning-fast hosting
+- **Deployed on Vercel**
 
 ### Backend
 - **Python** - Server language
 - **Flask** - Web framework
 - **Selenium** - Web scraping
 - **ChromeDriver** - Browser automation
-- **Deployed on Render** - Free tier hosting
+- **Deployed on Render** 
 
 ---
 
-##  Local Development
-
-Want to run PinHoader locally? Here's how:
-
-### Prerequisites
-- Node.js (v16+)
-- Python (v3.11+)
-- Chrome browser
-
-### Frontend Setup
-
-```bash
-# Navigate to client folder
-cd client
-
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-```
-
-Frontend will run on `http://localhost:5173`
-
-### Backend Setup
-
-```bash
-# Navigate to server folder
-cd server
-
-# Create virtual environment (optional but recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run Flask server
-python app.py
-```
-
-Backend will run on `http://localhost:3001`
-
-### Update API URLs
-
-When running locally, update the fetch URLs in `client/src/components/SearchBar.jsx`:
-
-```javascript
-// Change from production URL to:
-fetch('http://localhost:3001/api/downloadBoard', ...)
-```
-
----
-
-##  Environment Variables
-
-### Backend (Optional)
-- `PORT` - Server port (default: 3001)
-- `PYTHON_VERSION` - Python version for deployment (default: 3.11.0)
-
----
 
 ##  Limitations
 
 - **Public boards only** - Cannot access private or secret boards
-- **250 pins max** - Limited to 250 images per download
+- **300 pins max** - Limited to 300 images per download
 - **First request slow** - Free hosting goes to sleep after inactivity
 - **No videos** - Only downloads images, not video pins
 - **Rate limiting** - Pinterest may block if you scrape too aggressively
